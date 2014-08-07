@@ -25,7 +25,7 @@ echo =================
 curl localhost:9200
 
 #Expected output:
-/*
+: '
 {
   "status" : 200,
   "name" : "Mephisto",
@@ -38,6 +38,6 @@ curl localhost:9200
   },
   "tagline" : "You Know, for Search"
 }
-*/
+'
 
 
