@@ -20,7 +20,7 @@ bin/elasticsearch
 
 echo
 echo =================
-echo "test it works"
+echo "test it's alive"
 echo =================
 curl localhost:9200
 
@@ -40,4 +40,175 @@ curl localhost:9200
 }
 '
 
+echo
+echo =================
+echo "Ready to index!"
+echo =================
 
+###### CREATE ###### 
+
+echo =================
+echo "index a document - PUT"
+echo =================
+curl -XPUT localhost:9200/blog/posts/1 -d '{
+    "title": "Introduction to Elasticsearch"
+}'
+
+echo =================
+echo "index a document - POST"
+echo =================
+curl -XPOST localhost:9200/blog/posts/ -d '{
+    "title": "Introduction to Elasticsearch part2"
+}'
+
+###### GET ###### 
+
+echo
+echo =================
+echo "get the document"
+echo =================
+curl -XGET localhost:9200/blog/posts/1
+
+echo
+echo =================
+echo "get the document - make it pretty..."
+echo =================
+curl -XGET localhost:9200/blog/posts/1?pretty
+
+
+###### UPDATE ###### 
+echo
+echo =================
+echo "update it"
+echo =================
+curl -XPOST localhost:9200/blog/posts/1/_update -d '{
+  "doc": {
+    "tags": ["elasticsearch", "new york"]
+  }
+}'
+
+echo
+echo =================
+echo "get it again to see the changes"
+echo =================
+curl -XGET localhost:9200/blog/posts/1?pretty
+
+
+###### DELETE ###### 
+
+echo
+echo =================
+echo "delete the document"
+echo =================
+curl -XDELETE localhost:9200/blog/posts/1
+
+echo
+echo =================
+echo "delete its type"
+echo =================
+curl -XDELETE localhost:9200/blog/posts
+
+echo
+echo =================
+echo "delete its index"
+echo =================
+curl -XDELETE localhost:9200/blog
+
+echo
+echo =================
+echo "delete everything"
+echo =================
+curl -XDELETE localhost:9200
+
+###### SEARCH ###### 
+
+echo
+echo =================
+echo "URI search"
+echo =================
+#put tags
+curl -XPUT localhost:9200/blog/posts/1 -d '{
+    "title": "Introduction to Elasticsearch",
+    "tags": ["elasticsearch", "new york"]
+}'
+
+#TODO explain
+curl localhost:9200/blog/_refresh
+curl 'localhost:9200/blog/posts/_search?q=elasticsearch&pretty'
+
+
+echo
+echo =================
+echo "JSON search"
+echo =================
+curl localhost:9200/_search?pretty -d '{
+  "query": {
+    "term": {
+      "tags": "new"
+    }
+  }
+}'
+
+###### Analyze API  ###### 
+echo
+echo =================
+echo "analyze API"
+echo =================
+curl localhost:9200/_analyze?pretty -d 'new york'
+
+
+###### MAPPINGS ###### 
+
+echo
+echo =================
+echo "get mapping"
+echo =================
+curl localhost:9200/blog/posts/_mapping?pretty
+
+echo
+echo =================
+echo "update mapping and reindex"
+echo =================
+curl -XDELETE localhost:9200/blog/posts
+curl -XPUT localhost:9200/blog/posts/_mapping -d '{
+  "posts": {
+    "properties": {
+      "tags": {
+        "type": "string",
+        "index": "not_analyzed"
+      }
+    }
+  }
+}'
+curl -XPUT localhost:9200/blog/posts/1 -d '{
+    "title": "Introduction to Elasticsearch",
+    "tags": ["elasticsearch", "new york"]
+}'
+curl localhost:9200/blog/_refresh
+curl localhost:9200/_search?pretty -d '{
+  "query": {
+    "term": {
+      "tags": "new york"
+    }
+  }
+}'
+
+###### Facets ######
+echo
+echo =================
+echo "terms facet"
+echo =================
+curl -XPUT localhost:9200/blog/posts/2 -d '{
+    "title": "Introduction to Hadoop",
+    "tags": ["hadoop", "new york"]
+}'
+curl -XPOST localhost:9200/_refresh
+curl localhost:9200/_search?pretty -d '{
+  "facets": {
+    "tags": {
+      "terms": {
+        "field": "tags"
+      }
+    }
+  }
+}'
