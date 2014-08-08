@@ -46,3 +46,4 @@ curl localhost:9200/_analyze?pretty -d 'new york'
 
 ### Count 
 curl 'localhost:9200/froscon/_count?pretty=true'
+
