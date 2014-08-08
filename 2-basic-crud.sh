@@ -72,5 +72,3 @@ echo =================
 echo "delete everything"
 echo =================
 curl -XDELETE localhost:9200
-
-###### SEARCH ###### 
