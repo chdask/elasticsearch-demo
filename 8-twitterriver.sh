@@ -1,5 +1,8 @@
-# Twitter River 
+# Twitter River
+#install
+bin/plugin -install elasticsearch/elasticsearch-river-twitter/1.4.0
 
+#configure
 curl -XPUT localhost:9200/_river/frosconriver/_meta -d '
 {
     "type" : "twitter",
