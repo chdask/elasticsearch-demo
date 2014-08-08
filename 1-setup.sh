@@ -3,7 +3,7 @@
 echo =================
 echo "download"
 echo =================
-https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.3.1.tar.gz
+wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.3.1.tar.gz
 
 echo =================
 echo "extract"
