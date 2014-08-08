@@ -47,3 +47,17 @@ curl localhost:9200/_analyze?pretty -d 'new york'
 ### Count 
 curl 'localhost:9200/froscon/_count?pretty=true'
 
+
+
+
+echo
+echo =================
+echo "filter example"
+echo =================
+curl localhost:9200/_search?pretty -d '{
+  "filter": {
+    "term": {
+      "tags": "new york"
+    }
+  }
+}'
