@@ -1,4 +1,5 @@
 # Twitter River
+#https://github.com/elasticsearch/elasticsearch-river-twitter
 #install
 bin/plugin -install elasticsearch/elasticsearch-river-twitter/1.4.0
 
